@@ -19,7 +19,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
-  background: linear-gradient(#12232d, #000);
+  background: #000 url("../img/sealife.png") center bottom / cover no-repeat fixed;
 }
 
 body::before {
@@ -165,6 +165,21 @@ input, select, textarea {
 
 .card img { width: 72px; }
 
+.card .scene, .incident-banner .scene, .wide {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+}
+
+h1 .mark, h2 .mark, p .mark {
+  width: 42px;
+  height: auto;
+  vertical-align: -10px;
+  margin-right: 0.35rem;
+}
+
+.learn .wide { display: block; margin: 0.4rem 0 1rem; }
+
 .card h2 { font-size: 1.15rem; }
 
 .clown-count {
@@ -234,10 +249,13 @@ input, select, textarea {
 }
 
 .learn li::before {
-  content: "✶";
+  content: "";
   position: absolute;
   left: 0;
-  color: #c47b2b;
+  top: 0.55rem;
+  width: 18px;
+  height: 18px;
+  background: url("../img/starfish-bullets.png") center / contain no-repeat;
 }
 
 pre {

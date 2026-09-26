@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 TESTING = "test" in sys.argv
 
@@ -52,13 +52,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "crowdphish.urls"
-WSGI_APPLICATION = "crowdphish.wsgi.application"
+ROOT_URLCONF = "urls"
+WSGI_APPLICATION = "wsgi.application"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -112,8 +112,9 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+# collectstatic output stays outside the source tree.
+STATIC_ROOT = Path(os.environ.get("STATIC_ROOT", "/var/cache/crowdphish/static"))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

@@ -11,7 +11,7 @@
     </div>
     {% if latest %}
       <a class="incident-banner" href="{% url 'phishing:incident' latest.report_id %}">
-        <img src="{% static 'img/angler.svg' %}" alt="">
+        <img class="scene" src="{% static latest.scene %}" alt="">
         <span>
           <strong>Angler in the water</strong>
           <em>{{ latest.subject }}</em>
@@ -20,7 +20,7 @@
       </a>
     {% else %}
       <div class="incident-banner calm">
-        <img src="{% static 'img/dory.svg' %}" alt="">
+        <img class="scene" src="{% static 'img/reports-clear.png' %}" alt="">
         <span>
           <strong>Dory sees a clear reef</strong>
           <em>No elevated incident in the latest scan.</em>
@@ -47,10 +47,10 @@
   <section class="cards">
     {% for card in cards %}
       <article class="panel card level-{{ card.threat_level }}">
-        <img src="{% static 'img/' %}{% if card.is_incident %}angler.svg{% else %}dory.svg{% endif %}" alt="">
+        <img class="scene" src="{% static card.scene %}" alt="">
         <h2>{{ card.subject|default:"Untitled report" }}</h2>
         <p class="quiet">{{ card.origin_sender|default:"Sender not fetched yet" }}</p>
-        <p class="clown-count"><img src="{% static 'img/clownfish.svg' %}" alt=""> {{ card.report_count }} report{{ card.report_count|pluralize }}</p>
+        <p class="clown-count"><img src="{% static 'img/clown-sm.png' %}" alt=""> {{ card.report_count }} report{{ card.report_count|pluralize }}</p>
         <div class="meter" aria-hidden="true"><span style="width: {{ card.threat_score }}%"></span></div>
         <p class="quiet">Score {{ card.threat_score }} · {{ card.threat_level }} · {{ card.analyst_verdict }}</p>
         <a class="button" href="{% url 'phishing:incident' card.report_id %}">See report</a>
@@ -70,7 +70,7 @@
   {% endif %}
 {% else %}
   <section class="panel empty">
-    <img src="{% static 'img/dory.svg' %}" alt="">
+    <img src="{% static 'img/dory-lg.png' %}" alt="">
     <h2>Dory is still looking</h2>
     <p>No campaigns match this window.</p>
   </section>

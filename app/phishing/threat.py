@@ -40,5 +40,15 @@ def is_phishing_incident(submission):
 
 def fish_for_submission(submission):
     if is_phishing_incident(submission):
-        return "angler"
-    return "dory"
+        return "img/angler-bck.png"
+    return "img/dory-lg.png"
+
+
+def scene_image(*, report_count=1, threat_level="low", is_incident=False):
+    if report_count > 1:
+        return "img/reports-multiple.png"
+    if threat_level == "high":
+        return "img/reports-danger.png"
+    if is_incident or threat_level in {"elevated", "moderate"}:
+        return "img/reports-warning.png"
+    return "img/reports-clear.png"

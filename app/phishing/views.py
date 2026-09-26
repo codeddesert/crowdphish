@@ -24,7 +24,7 @@ from phishing.intel import (
     screenshot_url,
 )
 from phishing.models import BadActorProfile, PhishingReport
-from phishing.threat import display_threat, fish_for_submission, is_phishing_incident
+from phishing.threat import display_threat, fish_for_submission, is_phishing_incident, scene_image
 
 LATEST_INCIDENT_CACHE = "phishing:dashboard:latest_incident_summary"
 
@@ -74,6 +74,7 @@ def _latest_incident():
                 "threat_score": score,
                 "threat_level": level,
                 "analyst_verdict": submission.analyst_verdict,
+                "scene": scene_image(threat_level=level, is_incident=True),
             }
             break
     cache.set(LATEST_INCIDENT_CACHE, summary or {}, 60)
@@ -127,7 +128,7 @@ def phishing_dashboard(request):
     page = paginator.get_page(request.GET.get("page") or 1)
     return render(
         request,
-        "phishing/dashboard.html",
+        "dashboard.html",
         {
             "cards": page,
             "page_obj": page,
@@ -148,7 +149,7 @@ def phishing_incident_detail(request, report_id):
     score, level = display_threat(submission)
     return render(
         request,
-        "phishing/incident.html",
+        "incident.html",
         {
             "report": report,
             "submission": submission,

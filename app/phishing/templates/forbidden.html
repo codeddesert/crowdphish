@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}No access · Crowdphish{% endblock %}
 {% block content %}
 <section class="panel narrow">
+  <img class="solo" src="{% static 'img/cone.png' %}" alt="">
   <h1>This reef is closed</h1>
   <p>Your account can sign in, but it is not in the Crowdphish analyst group.</p>
 </section>

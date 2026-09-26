@@ -17,7 +17,7 @@ if [ "${CROWDPHISH_ROLE:-web}" = "web" ]; then
   if [ "${CROWDPHISH_DEV:-0}" = "1" ]; then
     RELOAD="--reload"
   fi
-  exec gunicorn crowdphish.wsgi:application \
+  exec gunicorn wsgi:application \
     --bind 0.0.0.0:8000 \
     --workers "${WORKERS}" \
     --timeout "${TIMEOUT}" \

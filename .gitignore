@@ -1,7 +1,10 @@
 .env
 **/.env
+!.env.example
 __pycache__/
 *.pyc
 staticfiles/
 secrets/
+phishing-gmail.json
 *.sqlite3
+*.pdn

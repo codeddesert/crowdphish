@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from phishing.models import PhishingCampaignContribution, PhishingReport
 from phishing.textutil import normalize_rfc822, normalize_subject
-from phishing.threat import display_threat, is_phishing_incident
+from phishing.threat import display_threat, is_phishing_incident, scene_image
 
 
 def subject_for_report(report):
@@ -152,6 +152,7 @@ def cards_from_reports(reports):
         representative = pick_representative(members)
         submission = representative.submission
         score, level = display_threat(submission)
+        incident = is_phishing_incident(submission)
         gmail_ids = []
         rfc_keys = []
         for member in members:
@@ -169,7 +170,12 @@ def cards_from_reports(reports):
                 "report_count": len(members),
                 "threat_score": score,
                 "threat_level": level,
-                "is_incident": is_phishing_incident(submission),
+                "is_incident": incident,
+                "scene": scene_image(
+                    report_count=len(members),
+                    threat_level=level,
+                    is_incident=incident,
+                ),
                 "analyst_verdict": submission.analyst_verdict or "unknown",
                 "analyst_confidence": submission.analyst_confidence or "",
                 "analyst_notes": submission.analyst_notes or "",

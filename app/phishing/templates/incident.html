@@ -10,7 +10,7 @@
       <p>{{ report.origin_sender|default:"Sender pending" }} · reported by {{ report.reporter_email|default:"unknown" }}</p>
       <p class="quiet">Fetch {{ report.rfc822_fetch_status|default:"not started" }} · Gmail id {{ report.gmail_message_id }}</p>
     </div>
-    <img class="solo" src="{% static 'img/' %}{% if fish == 'angler' %}angler.svg{% else %}dory.svg{% endif %}" alt="">
+    <img class="solo" src="{% static fish %}" alt="">
   </div>
   <div class="meter"><span style="width: {{ score }}%"></span></div>
   <p>Score {{ score }} · {{ level }} · verdict {{ submission.analyst_verdict }}</p>
@@ -25,7 +25,7 @@
 
 <section class="grid-2">
   <article class="panel">
-    <h2>Verdict</h2>
+    <h2><img class="mark" src="{% static 'img/lighthouse.png' %}" alt=""> Verdict</h2>
     <form method="post" action="{% url 'phishing:verdict' report.id %}">
       {% csrf_token %}
       <label>Verdict
@@ -50,7 +50,7 @@
     </form>
   </article>
   <article class="panel">
-    <h2>Message</h2>
+    <h2><img class="mark" src="{% static 'img/spam.png' %}" alt=""> Message</h2>
     <p class="quiet">{{ report.rfc822_message_id|default:"RFC822 Message-ID pending" }}</p>
     <pre>{{ body_excerpt|default:"The body arrives after the Gmail fetch." }}</pre>
   </article>
@@ -58,7 +58,7 @@
 
 <section class="grid-2">
   <article class="panel">
-    <h2>Extracted pieces</h2>
+    <h2><img class="mark" src="{% static 'img/radar-sm.png' %}" alt=""> Extracted pieces</h2>
     <ul class="plain">
       {% for artifact in artifacts %}
         <li><strong>{{ artifact.artifact_type }}</strong> {{ artifact.role }} — {{ artifact.value }}</li>
@@ -71,7 +71,7 @@
     <p class="quiet">IPQS {% if intel.ipqs %}on{% else %}off{% endif %} · VirusTotal {% if intel.virustotal %}on{% else %}off{% endif %} · ApiFlash {% if intel.apiflash %}on{% else %}off{% endif %}</p>
   </article>
   <article class="panel">
-    <h2>Bad actor profiles</h2>
+    <h2><img class="mark" src="{% static 'img/target.png' %}" alt=""> Bad actor profiles</h2>
     <ul class="plain">
       {% for profile in linked_profiles %}
         <li>Linked: {{ profile.name }}</li>
@@ -98,7 +98,7 @@
 </section>
 
 <section class="panel">
-  <h2>Reporter guidance</h2>
+  <h2><img class="mark" src="{% static 'img/megaphone.png' %}" alt=""> Reporter guidance</h2>
   <form method="post" action="{% url 'phishing:reporter-ai' report.id %}">
     {% csrf_token %}
     <button class="button" type="submit">Run guidance</button>
