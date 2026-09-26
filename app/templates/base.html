@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>{% block title %}Crowdphish{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/reef.css' %}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{% url 'lobby' %}">
+      <img src="{% static 'img/angler.svg' %}" alt="">
+      <span>Crowdphish</span>
+    </a>
+    <nav>
+      <a href="{% url 'learn' %}">Field guide</a>
+      {% if is_analyst %}
+        <a href="{% url 'phishing:dashboard' %}">Reports</a>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Log out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Analyst login</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% if messages %}
+      <ul class="notices">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

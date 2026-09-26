@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Crowdphish{% endblock %}
+{% block content %}
+<section class="panel hero">
+  <div class="cast">
+    <figure>
+      <img src="{% static 'img/angler.svg' %}" alt="">
+      <figcaption>Angler<br>bad mail and malware</figcaption>
+    </figure>
+    <figure>
+      <img src="{% static 'img/clownfish.svg' %}" alt="">
+      <figcaption>Clownfish<br>the reporter</figcaption>
+    </figure>
+    <figure>
+      <img src="{% static 'img/dory.svg' %}" alt="">
+      <figcaption>Dory<br>the person reading mail</figcaption>
+    </figure>
+  </div>
+  <div>
+    <p class="kicker">Deep water mail watch</p>
+    <h1>The angler hides in ordinary mail. The clownfish reports it. Dory decides what to do next.</h1>
+    <p>Crowdphish takes Gmail message ids from the reporter add-on and the phishing mailbox, pulls the message with a delegated service account, and keeps a count of how many times a campaign is reported.</p>
+    <div class="actions">
+      <a class="button" href="{% url 'learn' %}">Read the field guide</a>
+      {% if is_analyst %}
+        <a class="button secondary" href="{% url 'phishing:dashboard' %}">Open reports</a>
+      {% else %}
+        <a class="button secondary" href="{% url 'login' %}">Analyst login</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

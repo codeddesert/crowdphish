@@ -1,0 +1,7 @@
+Django~=4.2
+gunicorn
+psycopg2-binary
+whitenoise
+requests
+google-api-python-client
+google-auth

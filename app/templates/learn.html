@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Field guide · Crowdphish{% endblock %}
+{% block content %}
+<section class="panel learn">
+  <p class="kicker">For Dory, the person at the inbox</p>
+  <h1>How to spot the lure</h1>
+  <p>Phishing is an attempt to collect information with a deceptive message, link, call, or site. Filters stop a lot of it. A message that is disguised well, or sent from a real account, can still arrive. The angler is that message. You are Dory. If something feels off, a clownfish reports it.</p>
+
+  <h2>Check the full address</h2>
+  <ul>
+    <li>District mail comes from <strong>name@washk12.org</strong>. A lookalike domain is a lure, even when the display name is familiar.</li>
+    <li>A message can still be bad when it really is from washk12.org. That usually means the account was taken over.</li>
+    <li>Ask two questions: what does this want from me, and how does it want me to respond?</li>
+  </ul>
+
+  <h2>External mail</h2>
+  <p>A charge notice from a free mailbox, a phone number, and a short deadline is a common lure. A real company does not need you to panic. Do not call the number in the message. Use a number you already know.</p>
+
+  <h2>Internal mail</h2>
+  <p>Gift cards, secrecy, and a request that person would never make are the signs of a compromised coworker account. Check with them in person or on a known number. Do not reply to the message.</p>
+
+  <h2>Mail that is really from Google, PayPal, or another service</h2>
+  <p>Attackers use services that send mail on someone else's behalf. The sending domain can be legitimate while the document or link is not. Treat shared files and PDFs as links. Ask what the file wants you to do before you open it.</p>
+
+  <h2>Fake sign-in pages</h2>
+  <p>The page after the link often imitates a real login. Read the full site name. A lock icon only means the connection is encrypted. It does not mean the site is ours. Type the site yourself, or use a bookmark.</p>
+
+  <h2>QR codes and text messages</h2>
+  <ul>
+    <li>A QR code is a link you cannot read. Do not scan one that arrived from someone you do not trust, or one stuck over a real code.</li>
+    <li>Text-message links are often shortened, so the real address is hidden until you tap it.</li>
+    <li>A familiar area code does not mean the text is local.</li>
+  </ul>
+
+  <h2>If you already clicked</h2>
+  <p>Stop entering information. If this was a district exercise, your password was not kept. If you are not sure, change the password from a page you opened yourself and tell the technology team. Do not send the password to anyone.</p>
+
+  <h2>Report it</h2>
+  <p>Forward suspicious mail to <strong>{{ forward_address }}</strong>. The ingest mailbox turns that forward into a Crowdphish report. You can also use the Gmail report add-on, which sends only the message id.</p>
+  <p class="credit">Field notes adapted from the district phishing guide. Managed by Heath Edner.</p>
+</section>
+{% endblock %}

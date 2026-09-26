@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Reports · Crowdphish{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="split">
+    <div>
+      <p class="kicker">Last {{ days }} day{{ days|pluralize }}</p>
+      <h1>Reported campaigns</h1>
+      <p class="quiet">Gmail fetch is {% if gmail_ready %}ready{% else %}waiting on the service account file{% endif %}.</p>
+    </div>
+    {% if latest %}
+      <a class="incident-banner" href="{% url 'phishing:incident' latest.report_id %}">
+        <img src="{% static 'img/angler.svg' %}" alt="">
+        <span>
+          <strong>Angler in the water</strong>
+          <em>{{ latest.subject }}</em>
+          <small>Score {{ latest.threat_score }} · {{ latest.threat_level }} · {{ latest.analyst_verdict }}</small>
+        </span>
+      </a>
+    {% else %}
+      <div class="incident-banner calm">
+        <img src="{% static 'img/dory.svg' %}" alt="">
+        <span>
+          <strong>Dory sees a clear reef</strong>
+          <em>No elevated incident in the latest scan.</em>
+        </span>
+      </div>
+    {% endif %}
+  </div>
+  <form class="filters" method="get">
+    <label>Days <input type="number" name="days" min="1" max="90" value="{{ days }}"></label>
+    <label>Search <input type="search" name="q" value="{{ query }}"></label>
+    <label>Verdict
+      <select name="verdict">
+        <option value="">Any</option>
+        {% for item in verdicts %}
+          <option value="{{ item }}" {% if verdict == item %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="button" type="submit">Filter</button>
+  </form>
+</section>
+
+{% if cards %}
+  <section class="cards">
+    {% for card in cards %}
+      <article class="panel card level-{{ card.threat_level }}">
+        <img src="{% static 'img/' %}{% if card.is_incident %}angler.svg{% else %}dory.svg{% endif %}" alt="">
+        <h2>{{ card.subject|default:"Untitled report" }}</h2>
+        <p class="quiet">{{ card.origin_sender|default:"Sender not fetched yet" }}</p>
+        <p class="clown-count"><img src="{% static 'img/clownfish.svg' %}" alt=""> {{ card.report_count }} report{{ card.report_count|pluralize }}</p>
+        <div class="meter" aria-hidden="true"><span style="width: {{ card.threat_score }}%"></span></div>
+        <p class="quiet">Score {{ card.threat_score }} · {{ card.threat_level }} · {{ card.analyst_verdict }}</p>
+        <a class="button" href="{% url 'phishing:incident' card.report_id %}">See report</a>
+      </article>
+    {% endfor %}
+  </section>
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="pager">
+      {% if page_obj.has_previous %}
+        <a href="?days={{ days }}&q={{ query }}&verdict={{ verdict }}&page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?days={{ days }}&q={{ query }}&verdict={{ verdict }}&page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  <section class="panel empty">
+    <img src="{% static 'img/dory.svg' %}" alt="">
+    <h2>Dory is still looking</h2>
+    <p>No campaigns match this window.</p>
+  </section>
+{% endif %}
+{% endblock %}

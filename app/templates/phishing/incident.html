@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Report {{ report.id }} · Crowdphish{% endblock %}
+{% block content %}
+<section class="panel incident level-{{ level }}">
+  <div class="split">
+    <div>
+      <p class="kicker">{% if is_incident %}Angler in the water{% else %}Dory is still checking{% endif %}</p>
+      <h1>{{ submission.parsed_email.envelope.subject|default:report.message_title }}</h1>
+      <p>{{ report.origin_sender|default:"Sender pending" }} · reported by {{ report.reporter_email|default:"unknown" }}</p>
+      <p class="quiet">Fetch {{ report.rfc822_fetch_status|default:"not started" }} · Gmail id {{ report.gmail_message_id }}</p>
+    </div>
+    <img class="solo" src="{% static 'img/' %}{% if fish == 'angler' %}angler.svg{% else %}dory.svg{% endif %}" alt="">
+  </div>
+  <div class="meter"><span style="width: {{ score }}%"></span></div>
+  <p>Score {{ score }} · {{ level }} · verdict {{ submission.analyst_verdict }}</p>
+  {% if submission.risk_flags %}
+    <ul class="flags">
+      {% for flag in submission.risk_flags %}
+        <li>{{ flag.code }} <span>+{{ flag.points }}</span></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</section>
+
+<section class="grid-2">
+  <article class="panel">
+    <h2>Verdict</h2>
+    <form method="post" action="{% url 'phishing:verdict' report.id %}">
+      {% csrf_token %}
+      <label>Verdict
+        <select name="analyst_verdict">
+          {% for item in verdicts %}
+            <option value="{{ item }}" {% if submission.analyst_verdict == item %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Confidence
+        <select name="analyst_confidence">
+          <option value="">unspecified</option>
+          {% for item in confidence_levels %}
+            <option value="{{ item }}" {% if submission.analyst_confidence == item %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Notes
+        <textarea name="analyst_notes" rows="4">{{ submission.analyst_notes }}</textarea>
+      </label>
+      <button class="button" type="submit">Save verdict</button>
+    </form>
+  </article>
+  <article class="panel">
+    <h2>Message</h2>
+    <p class="quiet">{{ report.rfc822_message_id|default:"RFC822 Message-ID pending" }}</p>
+    <pre>{{ body_excerpt|default:"The body arrives after the Gmail fetch." }}</pre>
+  </article>
+</section>
+
+<section class="grid-2">
+  <article class="panel">
+    <h2>Extracted pieces</h2>
+    <ul class="plain">
+      {% for artifact in artifacts %}
+        <li><strong>{{ artifact.artifact_type }}</strong> {{ artifact.role }} — {{ artifact.value }}</li>
+      {% empty %}
+        <li>Nothing extracted yet.</li>
+      {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'phishing:review-urls' report.id %}">{% csrf_token %}<button class="button secondary" type="submit">Scan URLs</button></form>
+    <form method="post" action="{% url 'phishing:review-emails' report.id %}">{% csrf_token %}<button class="button secondary" type="submit">Scan emails</button></form>
+    <p class="quiet">IPQS {% if intel.ipqs %}on{% else %}off{% endif %} · VirusTotal {% if intel.virustotal %}on{% else %}off{% endif %} · ApiFlash {% if intel.apiflash %}on{% else %}off{% endif %}</p>
+  </article>
+  <article class="panel">
+    <h2>Bad actor profiles</h2>
+    <ul class="plain">
+      {% for profile in linked_profiles %}
+        <li>Linked: {{ profile.name }}</li>
+      {% empty %}
+        <li>No profile linked.</li>
+      {% endfor %}
+      {% for profile in candidates %}
+        <li>
+          Possible match: {{ profile.name }}
+          <form method="post" action="{% url 'phishing:bad-actor-associate' report.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="profile_id" value="{{ profile.id }}">
+            <button type="submit">Associate</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'phishing:bad-actor-create' report.id %}">
+      {% csrf_token %}
+      <label>New profile <input name="name" placeholder="{{ report.origin_sender }}"></label>
+      <button class="button secondary" type="submit">Create from this report</button>
+    </form>
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Reporter guidance</h2>
+  <form method="post" action="{% url 'phishing:reporter-ai' report.id %}">
+    {% csrf_token %}
+    <button class="button" type="submit">Run guidance</button>
+  </form>
+  <p class="quiet">Gemini {% if intel.gemini %}configured{% else %}not configured — heuristic guidance still runs{% endif %}.</p>
+  {% if submission.reporter_ai_guidance_json.internal %}
+    <h3>From the reef</h3>
+    <p>{{ submission.reporter_ai_guidance_json.internal.summary }}</p>
+  {% endif %}
+  {% if submission.reporter_ai_guidance_json.gemini %}
+    <h3>Gemini</h3>
+    <pre>{{ submission.reporter_ai_guidance_json.gemini }}</pre>
+  {% endif %}
+  {% if scans %}
+    <h3>Recent scans</h3>
+    <ul class="plain">
+      {% for scan in scans %}
+        <li>{{ scan.provider }} {{ scan.kind }} {{ scan.lookup_key }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</section>
+{% endblock %}
